@@ -1,9 +1,13 @@
 <?php
 
-declare(strict_types = 1);
+require __DIR__ . "/../vendor/autoload.php";
 
-include '../Transaction.php';
+$id = new \Ramsey\Uuid\UuidFactory();
 
-$transaction = new Transaction();
+$transaction = new \App\Transaction(12, "Description");
+
+echo $id->uuid4();
+
+echo '<br>';
 
 var_dump($transaction);
