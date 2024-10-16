@@ -2,12 +2,14 @@
 
 require __DIR__ . "/../vendor/autoload.php";
 
-$id = new \Ramsey\Uuid\UuidFactory();
+$root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
 
-$transaction = new \App\Transaction(12, "Description");
+define('VIEWS_PATH', $root . 'views' . DIRECTORY_SEPARATOR);
 
-echo $id->uuid4();
+$uuidFactory = new \Ramsey\Uuid\UuidFactory();
 
-echo '<br>';
+$id = $uuidFactory->uuid4();
 
-var_dump($transaction);
+$transaction = new \App\Transaction(12, "Basic Transaction");
+
+require VIEWS_PATH . 'home.php';
