@@ -1,15 +1,29 @@
 <?php
 
-require __DIR__ . "/../vendor/autoload.php";
+use Dotenv\Dotenv;
+use App\Router;
+use App\Controllers\HomeController;
+use App\App;
+
+require_once __DIR__ . "/../vendor/autoload.php";
 
 $root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
-
 define('VIEWS_PATH', $root . 'views' . DIRECTORY_SEPARATOR);
 
-$uuidFactory = new \Ramsey\Uuid\UuidFactory();
+$dotenv = Dotenv::createImmutable($root);
+$dotenv->load();
 
-$id = $uuidFactory->uuid4();
+$router = new Router;
 
-$transaction = new \App\Transaction(12, "Basic Transaction");
+$router
+    ->get("/", [HomeController::class, "index"]);
 
-require VIEWS_PATH . 'home.php';
+$app = new App(
+    $router,
+    [
+        "uri" => $_SERVER["REQUEST_URI"],
+        "method" => strtolower($_SERVER["REQUEST_METHOD"])
+    ]
+);
+
+$app->run();
