@@ -13,6 +13,19 @@ define('VIEWS_PATH', $root . 'views' . DIRECTORY_SEPARATOR);
 $dotenv = Dotenv::createImmutable($root);
 $dotenv->load();
 
+$config = [
+    "host" => $_ENV["DB_HOST"],
+    "user" => $_ENV["DB_USER"],
+    "pass" => $_ENV["DB_PASS"],
+    "database" => $_ENV["DB_DATABASE"],
+    "driver" => $_ENV["DB_DRIVER"] ?? "mysql"
+];
+
+$server_request = [
+    "uri" => $_SERVER["REQUEST_URI"],
+    "method" => strtolower($_SERVER["REQUEST_METHOD"])
+];
+
 $router = new Router;
 
 $router
@@ -20,10 +33,8 @@ $router
 
 $app = new App(
     $router,
-    [
-        "uri" => $_SERVER["REQUEST_URI"],
-        "method" => strtolower($_SERVER["REQUEST_METHOD"])
-    ]
+    $server_request,
+    $config
 );
 
 $app->run();
